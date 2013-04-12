@@ -7,6 +7,8 @@ class GradeEntryStudent < ActiveRecord::Base
   has_many  :grades, :dependent => :destroy
   has_many  :grade_entry_items, :through => :grades
 
+  has_and_belongs_to_many :tas
+
   validates_associated :user
   validates_associated :grade_entry_form
 
@@ -44,6 +46,32 @@ class GradeEntryStudent < ActiveRecord::Base
         raise RuntimeError.new(grade.errors)
       end
     end
+  end
+
+
+  def add_tas(tas)
+    return unless self.valid?
+    grade_entry_student_tas = self.tas
+    tas = Array(tas)
+    tas.each do |ta|
+      if !grade_entry_student_tas.include? ta
+        self.tas << ta
+        grade_entry_student_tas += [ta]
+      end
+    end
+    self.save
+  end
+
+  def remove_tas(ta_id_array)
+    #if no tas to remove, return.
+    return if ta_id_array == []
+    grade_entry_student_tas = self.tas
+
+    tas_to_remove = grade_entry_student_tas.find_all_by_id(ta_id_array)
+    tas_to_remove.each do |ta_to_remove|
+      self.tas.delete(ta_to_remove)
+    end
+    self.save
   end
 
 end
