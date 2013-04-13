@@ -13,7 +13,6 @@ var modalAddMember = null;
 var modalNotesGroup = null;
 var modalUpload = null;
 var modalDownload = null;
-var modalGraderCriteria = null;
 
 
 
@@ -231,7 +230,7 @@ $("global_action_form").observe('ajax:success', function(evt, status, data, xhr)
   <h2><%= t('groups.download.download_grader_maps') %></h2>
   <ul>
     <li><%= link_to t('marks_graders.download.download_grader_students_csv'),
-		    download_grader_groupings_mapping_grade_entry_form_marks_graders_path(@grade_entry_form),
+		    download_grader_students_mapping_grade_entry_form_marks_graders_path(@grade_entry_form),
 		    :onclick => "modalDownload.close();" %></li>
   </ul>
   <%= button_to_function I18n.t('cancel'), "modalDownload.close(); return false;" %>

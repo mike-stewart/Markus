@@ -3,7 +3,7 @@
  */
 document.observe("dom:loaded", function() {
 
-  /*new Form.Element.EventObserver('assign_criteria', function(element, value) {
+  new Form.Element.EventObserver('assign_criteria', function(element, value) {
 
     var value = value || false;
     var url = element.readAttribute('data-action');
@@ -18,7 +18,7 @@ document.observe("dom:loaded", function() {
       evalScripts: true,
       parameters: params
     })
-  })*/
+  })
 
 });
 

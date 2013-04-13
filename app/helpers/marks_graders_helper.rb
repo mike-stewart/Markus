@@ -1,18 +1,6 @@
 module MarksGradersHelper
 
-  # Given a list of criteria and an assignment, constructs an array of
-  # table rows to be insterted into the criteria FilterTable in the graders view.
-  # Called whenever it is necessary to update the criteria table with multiple
-  # changes.
-  def construct_criterion_table_rows(criteria, assignment)
-    result = {}
-    criteria.each do |criterion|
-      result[criterion.id] = construct_criterion_table_row(criterion, assignment)
-    end
-    return result
-  end
-
-  # Given a list of graders and an assignment, constructs an array of
+  # Given a list of graders and a grade entry form, constructs an array of
   # table rows to be insterted into the graders FilterTable in the graders view.
   # Called whenever it is necessary to update the graders table with multiple
   # changes.
@@ -24,13 +12,12 @@ module MarksGradersHelper
     return result
   end
 
-  # Given a list of groupings and an assignment, constructs an array of
-  # table rows to be insterted into the groupings FilterTable in the graders view.
-  # Called whenever it is necessary to update the groupings table with multiple
+  # Given a list of students and a grade entry form, constructs an array of
+  # table rows to be insterted into the students FilterTable in the graders view.
+  # Called whenever it is necessary to update the students table with multiple
   # changes.
   def construct_table_rows(students, grade_entry_form)
     result = {}
-    #total_criteria_count = assignment.criteria_count
     students.each do |students|
       result[students.id] = construct_table_row(students, grade_entry_form)
     end
@@ -60,7 +47,7 @@ module MarksGradersHelper
       return table_row
   end
 
-  # Given a grader and an assignment, constructs a table row to be insterted
+  # Given a grader and a grade entry form, constructs a table row to be inserted
   # into the grader FilterTable in the graders view.  Called whenever it
   # is necessary to update the graders table.
   def construct_grader_table_row(grader, grade_entry_form)
@@ -82,22 +69,5 @@ module MarksGradersHelper
 
     return table_row
   end
-
-  # Given a criterion and an assignment, constructs a table row to be insterted
-  # into the criteria FilterTable in the graders view.  Called whenever it
-  # is necessary to update the criteria table.
-  def construct_criterion_table_row(criterion, assignment)
-    table_row = {}
-
-    table_row[:id] = criterion.id
-    table_row[:filter_table_row_contents] =
-      render_to_string :partial => 'graders/table_row/filter_table_criterion_row',
-      :locals => {:criterion => criterion, :assignment => assignment}
-
-    table_row[:criterion_name] = criterion.get_name
-    table_row[:members] = criterion.get_ta_names.to_s
-    table_row[:coverage] = criterion.assigned_groups_count
-
-    return table_row
-  end
+  
 end

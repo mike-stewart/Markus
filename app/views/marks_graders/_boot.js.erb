@@ -13,6 +13,7 @@ document.observe("dom:loaded", function() {
 		$("centreColumn").setStyle({top: (document.viewport.getScrollOffsets().top + 110) +'px' }); 
 	});
 
+  //This reuses client-side javascript from assignment graders view for performance reasons, hence "groupings_table" name.
   groupings_table = new FilterTable({
     table_id: $('groups'),
     headers: {

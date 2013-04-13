@@ -33,7 +33,7 @@ class MarksGradersController < ApplicationController
     @grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
   end
 
-  # Assign TAs to Groupings via a csv file
+  # Assign TAs to Students via a csv file
   def csv_upload_grader_groups_mapping
     if !request.post? || params[:grader_mapping].nil?
       flash[:error] = I18n.t("csv.student_to_grader")
@@ -49,7 +49,8 @@ class MarksGradersController < ApplicationController
     redirect_to :action => 'index', :grade_entry_form_id => params[:grade_entry_form_id]
   end
 
-  def download_grader_groupings_mapping
+  #Download grader/student mappings in CSV format.
+  def download_grader_students_mapping
     grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
 
     #get all the students
@@ -73,7 +74,7 @@ class MarksGradersController < ApplicationController
 
     send_data(file_out, :type => "text/csv", :disposition => "inline")
   end
-  
+
   #These actions act on all currently selected graders & students
   def global_actions
     student_ids = params[:students]
@@ -84,7 +85,7 @@ class MarksGradersController < ApplicationController
       when "groups_table"
         @grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
         if params[:students].nil? or params[:students].size ==  0
-         #if there is a global action than there should be a group selected
+         #if there is a global action than there should be a student selected
           if params[:global_actions]
               @global_action_warning = I18n.t("assignment.group.select_a_student")
               render :partial => "shared/global_action_warning.rjs"
@@ -149,11 +150,10 @@ class MarksGradersController < ApplicationController
     render :modify_groupings
   end
 
-  # Removes the graders contained in params from the groupings given
-  # in groupings.
+  # Removes the graders contained in params from the students given in studens.
   # This is meant to be called with the params from global_actions, and for
   # each grader to delete it will have a parameter
-  # of the form "groupid_graderid"
+  # of the form "studentid_graderid"
   def remove_graders(students, params)
     students.each do |student|
       grader_params = params.find_all{|p| p[0].include?("#{student.id}_")}
@@ -171,7 +171,7 @@ class MarksGradersController < ApplicationController
   end
 
   def construct_all_rows(students, graders)
-    @groupings_data = construct_table_rows(students, @grade_entry_form)
+    @students_data = construct_table_rows(students, @grade_entry_form)
     @graders_data = construct_grader_table_rows(graders, @grade_entry_form)
   end
 end

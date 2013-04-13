@@ -1,5 +1,5 @@
 <%
-# Erb template for inserting a member into a group for managing groups
+# Erb template for adding a grader to a grade entry student row
 %> 
 <% grade_entry_form.grade_entry_students.find_by_user_id(student.id).tas.each do |ta| %>
 	<% ta_user = User.find(ta.id) %>
@@ -8,4 +8,3 @@
 	  <%=  label_tag "#{student.id}_#{ta_user.user_name}", ta_user.user_name, :class => 'inline_label' %>
 	</span>
 <% end %>
-
