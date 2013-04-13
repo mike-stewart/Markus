@@ -59,7 +59,6 @@ class GradeEntryStudent < ActiveRecord::Base
     CsvHelper::Csv.parse(csv_file_contents) do |row|
       student_name = row.shift # Knocks the first item from array
       student = Student.find_by_user_name(student_name)
-      #debugger
       if student.nil?
         failures.push(student_name)
       else
@@ -78,7 +77,6 @@ class GradeEntryStudent < ActiveRecord::Base
     grade_entry_tas = []
     ta_user_name_array.each do |ta_user_name|
       ta = Ta.find_by_user_name(ta_user_name)
-      #debugger
       if !ta.nil?
         if !self.tas.include?(ta)
           self.tas << ta

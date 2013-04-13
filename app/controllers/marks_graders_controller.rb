@@ -73,22 +73,7 @@ class MarksGradersController < ApplicationController
 
     send_data(file_out, :type => "text/csv", :disposition => "inline")
   end
-
-  def add_grader_to_grouping
-    @grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
-    @grouping = Grouping.find(params[:grouping_id],
-                                :include => [:students, :tas, :group])
-    grader = Ta.find(params[:grader_id])
-    @grouping.add_tas(grader)
-    @groupings_data = construct_table_rows([@grouping.reload],@grade_entry_form)
-    @graders_data = construct_grader_table_rows([grader], @grade_entry_form)
-    criteria = grader.get_criterion_associations_by_assignment(@grade_entry_form).map{|c| c.criterion}
-    criteria.each do |criterion|
-      criterion.save
-    end
-    @criteria_data = construct_criterion_table_rows(criteria, @grade_entry_form)
-  end
-
+  
   #These actions act on all currently selected graders & students
   def global_actions
     student_ids = params[:students]
