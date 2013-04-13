@@ -38,6 +38,8 @@ module MarksGradersHelper
   end
 
   def construct_table_row(students, grade_entry_form)
+      grade_entry_student = GradeEntryStudent.find_by_user_id(students.id)
+
       table_row = {}
 
       table_row[:id] = students.id
@@ -50,7 +52,7 @@ module MarksGradersHelper
       table_row[:first_name] = students.first_name
       table_row[:last_name] = students.last_name
       table_row[:section] = students.section.nil? ? "" : students.section.name
-      table_row[:members] = GradeEntryStudent.find_by_user_id(students.id).nil? ? "" : GradeEntryStudent.find_by_user_id(students.id).tas.collect{ |grader| grader.user_name}.join(',')
+      table_row[:members] = grade_entry_student.nil? ? "" : grade_entry_student.tas.collect{ |grader| grader.user_name}.join(',')
 
       #These are are used for searching
       table_row[:graders] = table_row[:members]

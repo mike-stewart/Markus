@@ -44,20 +44,6 @@ document.observe("dom:loaded", function(){
 
     });
 
-    modalGroupsCoverage = new Control.Modal($('groups_coverage_dialog'),
-    {
-     overlayOpacity: 0.75,
-     className: 'modalGroupsCoverage',
-     fade: false
-
-    });
-    modalGraderCriteria = new Control.Modal($('grader_criteria_dialog'),
-    {
-     overlayOpacity: 0.75,
-     className: 'modalGraderCriteria',
-     fade: false
-
-    });
 })
 
 
@@ -244,19 +230,16 @@ $("global_action_form").observe('ajax:success', function(evt, status, data, xhr)
 <div id="download_dialog">
   <h2><%= t('groups.download.download_grader_maps') %></h2>
   <ul>
-    <li><%= link_to t('groups.download.download_grader_groups_csv'),
+    <li><%= link_to t('marks_graders.download.download_grader_students_csv'),
 		    download_grader_groupings_mapping_grade_entry_form_marks_graders_path(@grade_entry_form),
-		    :onclick => "modalDownload.close();" %></li>
-    <li><%= link_to t('groups.download.download_grader_criteria_csv'),
-		    download_grader_criteria_mapping_grade_entry_form_marks_graders_path(@grade_entry_form),
 		    :onclick => "modalDownload.close();" %></li>
   </ul>
   <%= button_to_function I18n.t('cancel'), "modalDownload.close(); return false;" %>
 </div>
 
 <div id="upload_dialog">
-  <h2><%= I18n.t("groups.upload.upload_grader_map") %></h2>
-  <%= raw(I18n.t("groups.upload.description_grader_map")) %>
+  <h2><%= I18n.t("marks_graders.upload.upload_grader_map") %></h2>
+  <%= raw(I18n.t("marks_graders.upload.description_grader_map")) %>
   <%= form_tag({:controller=>"marks_graders",
     :action => 'csv_upload_grader_groups_mapping',:id => @grade_entry_form.id},
     {:multipart => true}) do %>
@@ -272,10 +255,4 @@ $("global_action_form").observe('ajax:success', function(evt, status, data, xhr)
     </p>
   <% end %>
 
-</div>
-
-<div id="groups_coverage_dialog">
-</div>
-
-<div id="grader_criteria_dialog">
 </div>

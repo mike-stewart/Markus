@@ -17,12 +17,6 @@ class MarksGradersController < ApplicationController
     render :partial => "marks_graders/modal_dialogs/download_dialog.rjs"
   end
 
-  def groups_coverage_dialog
-    @grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
-    @grouping = Grouping.find(params[:grouping])
-    render :partial => "marks_graders/modal_dialogs/groups_coverage_dialog.rjs"
-  end
-
   def populate
     @grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
     @students = Student.all
@@ -42,12 +36,12 @@ class MarksGradersController < ApplicationController
   # Assign TAs to Groupings via a csv file
   def csv_upload_grader_groups_mapping
     if !request.post? || params[:grader_mapping].nil?
-      flash[:error] = I18n.t("csv.group_to_grader")
+      flash[:error] = I18n.t("csv.student_to_grader")
       redirect_to :action => 'index', :grade_entry_form_id => params[:grade_entry_form_id]
       return
     end
 
-    invalid_lines = Grouping.assign_tas_by_csv(params[:grader_mapping].read,
+    invalid_lines = GradeEntryStudent.assign_tas_by_csv(params[:grader_mapping].read,
                                                params[:grade_entry_form_id], params[:encoding])
     if invalid_lines.size > 0
       flash[:invalid_lines] = invalid_lines
@@ -56,20 +50,25 @@ class MarksGradersController < ApplicationController
   end
 
   def download_grader_groupings_mapping
-    assignment = GradeEntryForm.find(params[:grade_entry_form_id], :include => [{:groupings => :group}])
+    grade_entry_form = GradeEntryForm.find(params[:grade_entry_form_id])
 
-    #get all the groups
-    groupings = assignment.groupings
+    #get all the students
+    students = Student.all
 
     file_out = CsvHelper::Csv.generate do |csv|
-       groupings.each do |grouping|
-         group_array = [grouping.group.group_name]
-         # csv format is group_name, ta1_name, ta2_name, ... etc
-         grouping.tas.each do |ta|
-            group_array.push(ta.user_name);
-         end
-         csv << group_array
-       end
+      students.each do |student|
+        student_array = [student.user_name]
+        # csv format is student_name, ta1_name, ta2_name, ... etc
+
+        grade_entry_student = grade_entry_form.grade_entry_students.find_by_user_id(student.id)
+        if !grade_entry_student.nil?
+          grade_entry_student.tas.each do |ta|
+            student_array.push(ta.user_name);
+          end
+        end
+
+          csv << student_array
+        end
      end
 
     send_data(file_out, :type => "text/csv", :disposition => "inline")
