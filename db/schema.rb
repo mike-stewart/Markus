@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130408025520) do
+ActiveRecord::Schema.define(:version => 20131007065920) do
 
   create_table "annotation_categories", :force => true do |t|
     t.text     "annotation_category_name"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(:version => 20130408025520) do
     t.integer  "annotation_category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "creator_id"
+    t.integer  "last_editor_id"
   end
 
   add_index "annotation_texts", ["annotation_category_id"], :name => "index_annotation_texts_on_annotation_category_id"
@@ -153,6 +155,7 @@ ActiveRecord::Schema.define(:version => 20130408025520) do
     t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "show_total"
   end
 
   add_index "grade_entry_forms", ["short_identifier"], :name => "index_grade_entry_forms_on_short_identifier", :unique => true
@@ -163,6 +166,7 @@ ActiveRecord::Schema.define(:version => 20130408025520) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "out_of"
+    t.integer  "position"
   end
 
   add_index "grade_entry_items", ["grade_entry_form_id", "name"], :name => "index_grade_entry_items_on_grade_entry_form_id_and_name", :unique => true
