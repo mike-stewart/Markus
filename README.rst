@@ -1,3 +1,6 @@
+.. image: https://travis-ci.org/mike-stewart/Markus.png?branch=master
+   :align: right
+
 .. image:: http://markusproject.org/markus_logo_big.png
    :align: center
    :alt: MarkUs logo
